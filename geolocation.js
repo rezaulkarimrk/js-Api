@@ -1,10 +1,12 @@
 const display = document.getElementById('display');
 myLocation = document.getElementById('btn');
+let id;
 
 const latitud = 23.7787992;
 const longitud = 90.4141561;
 
 const showError = (err) => {
+    console.log(err)
     switch(err.code){
         case err.PERMISSION_DENIED:
             display.innerHTML = "User denied the requiest for Geolocation.";
@@ -23,15 +25,15 @@ const showError = (err) => {
 
 const getLocation = () => {
     if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-        navigator.geolocation.watchPosition(showPosition, showError);
+        // navigator.geolocation.getCurrentPosition(showPosition, showError);
+        id = navigator.geolocation.watchPosition(showPosition, showError);
     }else {
         display.innerHTML = ('Geolocation is not available in your browser!');
     }
 }
 
 const showPosition = (position) => {
-    display.innerHTML = `Latitude: ${position.coords.latitude} + <br/> Longitude: ${position.coords.longitude}`
+    display.innerHTML = `Latitude: ${position.coords.latitude}<br/> Longitude: ${position.coords.longitude}`
 }
 
 const showLocation = (position) => {
@@ -45,3 +47,7 @@ myLocation.addEventListener('click', () => {
         alert('Your Browser dosent support Geolocation');
     }
 })
+
+const clearWatch = () => {
+    navigator.geolocation.clearWatch(id);
+}
